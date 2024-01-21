@@ -1,0 +1,8 @@
+pip install catboost
+pip install discord
+pip install lightgbm
+pip install tensorflow
+pip install xgboost
+pip install cloudscraper
+pip install tls_client 
+pip install scikit-learn
