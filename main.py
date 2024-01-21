@@ -442,7 +442,7 @@ async def check_subscriptions():
                 expired_users.append(user_id) 
 
         for user_id in expired_users:
-            guild_id = 1184962653991477288
+            guild_id = 1193652509277962280
             guild = client.get_guild(guild_id)
             member = await guild.fetch_member(int(user_id))
             role_name = "Customers"
@@ -477,7 +477,7 @@ async def create_key(interaction: discord.Interaction, time: int, sendto: Option
         await interaction.response.send_message(embed=embed_role, ephemeral=True)
         return
 
-    guild_id = 1184962653991477288 
+    guild_id = 1193652509277962280 
     guild = client.get_guild(guild_id)
     owner_role = "Owner"
     role = discord.utils.get(guild.roles, name=owner_role) 
@@ -534,7 +534,7 @@ async def redeem(interaction: discord.Interaction, key: str):
         await interaction.response.send_message(embed=embed, ephemeral=True)
         return
 
-    guild_id = 1184962653991477288
+    guild_id = 1193652509277962280
     guild = client.get_guild(guild_id)
     role_name = "Customers"
     role = discord.utils.get(guild.roles, name=role_name)
@@ -720,9 +720,12 @@ async def choices(interaction: discord.Interaction, choice: str = None, hexcolor
 #method
 
 PREDICTION_CHOICES = {
-    "4": "Api Linked",
+    "1": "Logarithm",
+    "2": "Logarithm2",
+    "3": "Past Games",
+    "4": "Probability",
     "5": "AI",
-    "10": "idek"
+    "10": "Algorithm"
 }  
 
 @app_commands.choices(
