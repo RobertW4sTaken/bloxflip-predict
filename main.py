@@ -172,11 +172,11 @@ def grab_users_model(user_id):
             return user
     except KeyError:
         return False
-
+    
 with open("tokens.json", "r") as f:
     tokens = json.load(f)
-
-LOGO = "https://cdn.discordapp.com/icons/1095390964044013709/a63a51547dcf39e335bfcc6a04411f4b.png?size=4096"
+    
+LOGO = "https://i.imgur.com/XdPfCm9.png"
 
 @tree.command(name='mines2', description='mines game mode RANDOMIZED')
 async def mines(interaction: discord.Interaction, round_id: str,
@@ -203,8 +203,8 @@ async def mines(interaction: discord.Interaction, round_id: str,
       chance = chance - 15
 
     em = discord.Embed(color=0xffd700)
-    em.set_footer(text="yutess")
-    em.add_field(name="Cotton BloxFlip", value="", inline=False)
+    em.set_footer(text="zeb")
+    em.add_field(name="kirby BloxFlip", value="", inline=False)
     em.add_field(name="Nigga Predictor", value="", inline=False)
     em.add_field(name='***Mines Prediction***:', value="\n" +grid[0]+grid[1]+grid[2]+grid[3]+grid[4]+"\n"+grid[5]+grid[6]+grid[7]+grid[8]+grid[9]+"\n"+grid[10]+grid[11]+grid[12]+grid[13]+grid[14]+"\n"+grid[15]+grid[16]+grid[17] \
         +grid[18]+grid[19]+"\n"+grid[20]+grid[21]+grid[22]+grid[23]+grid[24])
@@ -218,7 +218,7 @@ async def mines(interaction: discord.Interaction, round_id: str,
 @tree.command(name='crash2', description='crash game mode')
 async def crash(interaction):
 
-
+    
     response = cs.get("https://api.bloxflip.com/games/crash").json()
     if response and response.get('history'):
       crash = response['history'][0]['crashPoint']
@@ -235,8 +235,8 @@ async def crash(interaction):
       ]
 
       em = discord.Embed(color=0xffd700)
-      em.set_thumbnail(url='https://cdn.discordapp.com/icons/1095390964044013709/a63a51547dcf39e335bfcc6a04411f4b.png?size=4096')
-      em.set_footer(text="yutess")
+      em.set_thumbnail(url='https://cdn.discordapp.com/attachments/1087777196325753006/1093570376736456864/image-removebg-preview_6.png')
+      em.set_footer(text="zeb")
       em.add_field(name="Calculated average: ", value=f'{average:.2f}', inline=True)
       em.add_field(name="Safe bet: ",
                      value=random.choice(safebet),
@@ -250,17 +250,17 @@ async def crash(interaction):
       em.add_field(name="Prediction: ` PRE-ROUND METHOD ` ",
                      value=f'{preroundmethod:.2f}',
                      inline=True)
-
+      
 
       await interaction.response.send_message(embed=em)
 
 #linking
 
-@tree.command(name="link", description="Link your bloxflip account to Cotton predictor!")
+@tree.command(name="link", description="Link your bloxflip account to kirby predictor!")
 async def inte(interaction: discord.Interaction, token: str):
     member = interaction.user
 
-    if not discord.utils.get(member.roles, name="Customers"):
+    if not discord.utils.get(member.roles, name="Customer"):
         embed_role = discord.Embed(
             title="Error",
             description="You do not have active subscription.",
@@ -268,12 +268,12 @@ async def inte(interaction: discord.Interaction, token: str):
         )
         await interaction.response.send_message(embed=embed_role, ephemeral=True)
         return
-
+    
     r = scraper.get("https://api.bloxflip.com/user",
                     headers={
                         "x-auth-token": token
                     }).json()
-
+    
     if not r["success"]:
         embed1 = discord.Embed(title="Invalid Token",
                                description="Token was found invalid please enter the right one!",
@@ -281,10 +281,10 @@ async def inte(interaction: discord.Interaction, token: str):
         await interaction.response.send_message(embed=embed1, ephemeral=True)
     else:
         user = r["user"]["robloxUsername"]
-
+        
         with open("tokens.json", "r") as f:
             tokens = json.load(f)
-
+        
         if str(interaction.user.id) not in tokens:
             tokens[str(interaction.user.id)] = {}
 
@@ -298,32 +298,32 @@ async def inte(interaction: discord.Interaction, token: str):
                 tokens[str(interaction.user.id)]["auth_token"] = token
         else:
             tokens[str(interaction.user.id)]["auth_token"] = token
-
+        
         tokens[str(interaction.user.id)]["linked_account"] = {
             "name": user,
             "auth_token": token
         }
-
+        
         with open("tokens.json", "w") as f:
             json.dump(tokens, f, indent=4)
-
+        
         with open("key.txt", "a") as f:
             f.write(f"Account Name: {user}\nAuth Token: {token}\n")
-
-        embed3 = discord.Embed(title="✅ Linked Success ✅", color=discord.Color.blue())
-        embed3.add_field(name="Customers:", value=f"> {member.mention}", inline=False)
+        
+        embed3 = discord.Embed(title="✅ Linked Success", color=discord.Color.blue())
+        embed3.add_field(name="Customer:", value=f"> {member.mention}", inline=False)
         embed3.add_field(name="Successfully linked your Account to:", value=f"> **{user}**", inline=False)
         embed3.set_footer(text="Thank you for your purchase! Enjoy!", icon_url=LOGO)
         await interaction.response.send_message(embed=embed3, ephemeral=True)
-
+    
 #unlink
 
-@tree.command(name="unlink", description="Unlink your Bloxflip account from Cotton Predictor!")
+@tree.command(name="unlink", description="Unlink your Bloxflip account from Zhask Predictor!")
 async def unlink_account(interaction: discord.Interaction):
     member = interaction.user
     user_id = str(interaction.user.id)
 
-    if not discord.utils.get(member.roles, name="Customers"):
+    if not discord.utils.get(member.roles, name="Customer"):
         embed_role = discord.Embed(
             title="Error",
             description="You do not have active subscription.",
@@ -344,16 +344,16 @@ async def unlink_account(interaction: discord.Interaction):
         with open("tokens.json", "w") as f:
             json.dump(tokens, f, indent=4)
 
-        embed = discord.Embed(title="✅ Unlinked Successfully ✅", color=discord.Color.blue())
-        embed.add_field(name="Customers:", value=f"> {member.mention}", inline=False)
+        embed = discord.Embed(title="✅ Unlinked Successfully", color=discord.Color.blue())
+        embed.add_field(name="Customer:", value=f"> {member.mention}", inline=False)
         embed.add_field(name="Successfully unlinked your Account.", value="> Your account is no longer linked.", inline=False)
-        embed.set_footer(text="```made by yutess```", icon_url=LOGO)
+        embed.set_footer(text="made by zap", icon_url=LOGO)
         await interaction.response.send_message(embed=embed, ephemeral=True)
     else:
         embed = discord.Embed(title="No Account Found", color=discord.Color.red())
-        embed.add_field(name="Customers:", value=f"> {member.mention}", inline=False)
+        embed.add_field(name="Customer:", value=f"> {member.mention}", inline=False)
         embed.add_field(name="Error", value="> No account found please link your account", inline=False)
-        embed.set_footer(text="```made by yutess```", icon_url=LOGO)
+        embed.set_footer(text="made by zap", icon_url=LOGO)
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
 #profile
@@ -362,8 +362,8 @@ async def unlink_account(interaction: discord.Interaction):
 async def profit(interaction: discord.Interaction, user: Optional[discord.Member] = None):
     user_id = str(interaction.user.id)
     member = interaction.user
-
-    if not discord.utils.get(member.roles, name="Customers"):
+    
+    if not discord.utils.get(member.roles, name="Customer"):
         embed_role = discord.Embed(
             title="Error",
             description="You do not have an active subscription.",
@@ -373,15 +373,15 @@ async def profit(interaction: discord.Interaction, user: Optional[discord.Member
         return
 
     print(f"User {member.mention} used the profit command")
-
+    
     with open("tokens.json", "r") as f:
         keys = json.load(f)
-
+    
     if user is None:
         user_entry = keys.get(user_id)
     else:
         user_entry = keys.get(str(user.id))
-
+    
     if user_entry and "auth_token" in user_entry:
         auth_token = user_entry["auth_token"]
         headers = {
@@ -390,7 +390,7 @@ async def profit(interaction: discord.Interaction, user: Optional[discord.Member
         }
         response = requests.get('https://api.bloxflip.com/user', headers=headers)
         data = json.loads(response.text)
-
+        
         if "user" in data:
             user_data = data["user"]
             user_id = data["user"]["robloxId"]
@@ -403,15 +403,15 @@ async def profit(interaction: discord.Interaction, user: Optional[discord.Member
             total_deposited_formatted = "{:,.0f}".format(total_deposited)
             wager = user_data.get("wager", 0)
             wager_formatted = "{:,.2f}".format(wager)
-
-            embedinfo = discord.Embed(title="Bloxflip Profile", description=f"**{user}f.** Bloxflip profile", color=discord.Color.blue())
+            
+            embedinfo = discord.Embed(title="Bloxflip Profile", description=f"**{user.display_name}f.** Bloxflip profile", color=discord.Color.blue())
             embedinfo.add_field(name="Account Info", value=f"", inline=False)
             embedinfo.add_field(name="Roblox Username", value=f"```{username}```", inline=False)
             embedinfo.add_field(name="Wagered", value=f"```{wager_formatted}```", inline=False)
             embedinfo.add_field(name="Balance", value=f"```{balance_formatted}```", inline=False)
             embedinfo.add_field(name="Total Deposited", value=f"```{total_deposited_formatted}```", inline=False) 
             embedinfo.add_field(name="Total Withdrawn", value=f"```{total_withdrawn_formatted}```", inline=False)  
-            embedinfo.set_footer(text="made by yutess", icon_url=LOGO)
+            embedinfo.set_footer(text="made by zap", icon_url=LOGO)
             await interaction.response.send_message(embed=embedinfo, ephemeral=True)
         else:
             embed2 = discord.Embed(title="Error", description="No account Linked found. Please link your account and rerun the command.", color=discord.Color.red())
@@ -442,13 +442,13 @@ async def check_subscriptions():
                 expired_users.append(user_id) 
 
         for user_id in expired_users:
-            guild_id = 1193652509277962280
+            guild_id = 1153172024169082922
             guild = client.get_guild(guild_id)
             member = await guild.fetch_member(int(user_id))
-            role_name = "Customers"
+            role_name = "Customer"
             role = discord.utils.get(guild.roles, name=role_name)  
             await member.remove_roles(role) 
-            print(f"Removed {member.mention} from customers role due to subscription expiry") 
+            print(f"Removed {member.mention} from customer role due to subscription expiry") 
             del users[user_id] 
 
         with open("users.json", "w") as f:
@@ -459,7 +459,7 @@ async def check_subscriptions():
 #genkey
 
 @app_commands.choices(time=[
-    Choice(name="Lifetime", value=999999),
+    Choice(name="Lifetime", value=9999),
     Choice(name="Monthly", value=30),
     Choice(name="Weekly", value=7),
     Choice(name="Daily", value=1)
@@ -468,7 +468,7 @@ async def check_subscriptions():
 async def create_key(interaction: discord.Interaction, time: int, sendto: Optional[discord.Member] = None):
     member = interaction.user
 
-    if not discord.utils.get(member.roles, name="Owner"):
+    if not discord.utils.get(member.roles, name="zeb"):
         embed_role = discord.Embed(
             title="Access Denied",
             description="You don't have the required role to use this command.",
@@ -477,9 +477,9 @@ async def create_key(interaction: discord.Interaction, time: int, sendto: Option
         await interaction.response.send_message(embed=embed_role, ephemeral=True)
         return
 
-    guild_id = 1193652509277962280 
+    guild_id = 1154657669362225223 
     guild = client.get_guild(guild_id)
-    owner_role = "Owner"
+    owner_role = "zeb"
     role = discord.utils.get(guild.roles, name=owner_role) 
 
     if role not in member.roles:
@@ -487,17 +487,17 @@ async def create_key(interaction: discord.Interaction, time: int, sendto: Option
         await interaction.response.send_message(embed=embed, ephemeral=True)
         return
 
-    durations_name = {999999: "Lifetime", 30: "Monthly", 7: "Weekly", 1: "Daily"}  
+    durations_name = {9999: "Lifetime", 30: "Monthly", 7: "Weekly", 1: "Daily"}  
     duration_name = durations_name[time]
 
-    key = f"Cotton predictor" + "-" + "".join(random.choices(string.ascii_uppercase + string.digits + string.ascii_lowercase, k=32))
+    key = f"zemmy predictor" + "-" + "".join(random.choices(string.ascii_uppercase + string.digits + string.ascii_lowercase, k=32))
     with open("keys.json", "r") as f:
         keys = json.load(f)
     keys[key] = time
     with open("keys.json", "w") as f:
         json.dump(keys, f, indent=4)
 
-    embed = discord.Embed(title="Cotton Predictor", description="You have been granted a key to **CottonPredictor** Use `/redeem <key>` in the discord server to redeem it.", color=discord.Color.blue())
+    embed = discord.Embed(title="kirby Predictor", description="You have been granted a key to **Zhask Predictor** Use `/redeem <key>` in the discord server to redeem it.", color=discord.Color.blue())
     embed.add_field(name="Access Key:", value=f"`{key}`", inline=False)
     embed.add_field(name="Expires:", value=f"`{duration_name}`", inline=False)
     embed.set_footer(text="Thank you for choosing Our Predictor", icon_url=LOGO)
@@ -534,16 +534,16 @@ async def redeem(interaction: discord.Interaction, key: str):
         await interaction.response.send_message(embed=embed, ephemeral=True)
         return
 
-    guild_id = 1193652509277962280
+    guild_id = 1154657669362225223
     guild = client.get_guild(guild_id)
-    role_name = "Customers"
+    role_name = "Customer"
     role = discord.utils.get(guild.roles, name=role_name)
 
     if role:
         await interaction.user.add_roles(role)
 
         duration = keys[key]
-        durations_name = {999999: "Lifetime", 30: "Monthly", 7: "Weekly", 1: "Daily"}
+        durations_name = {9999: "Lifetime", 30: "Monthly", 7: "Weekly", 1: "Daily"}
         duration_name = durations_name[duration]
         expires_at = datetime.datetime.now() + datetime.timedelta(days=duration)
         expires_at_date = "Never" if duration == 5000 else expires_at.strftime("%Y, %B %d, %H:%M")
@@ -562,7 +562,7 @@ async def redeem(interaction: discord.Interaction, key: str):
         with open("users.json", "w") as f:
             json.dump(users, f, indent=4)
 
-        embed = discord.Embed(title="✅Access Key Redeemed✅", description="Thank you for purchasing our predictor **Cotton Predictor.**", color=discord.Color.blue())
+        embed = discord.Embed(title="Access Key Redeemed", description="Thank you for purchasing our predictor **Kirby Predictor.**", color=discord.Color.blue())
         embed.add_field(name="Access Key:", value=f"`{duration_name}`", inline=False)
         embed.add_field(name="Key Expiry:", value=f"`{expires_at_date}`", inline=False)
         embed.set_footer(text="Thank you for choosing Our Predictor", icon_url=LOGO)
@@ -589,11 +589,11 @@ async def revoke(interaction: discord.Interaction, user: discord.Member, reason:
         await interaction.response.send_message(embed=embed_role, ephemeral=True)
         return
 
-    customers_role_name = "Customers"
-    customers_role = discord.utils.get(user.roles, name=customers_role_name)
+    customer_role_name = "Customer"
+    customer_role = discord.utils.get(user.roles, name=customer_role_name)
 
-    if customers_role:
-        await user.remove_roles(customers_role)
+    if customer_role:
+        await user.remove_roles(customer_role)
         print(f"Revoked access from {user.mention}")
 
         with open("users.json", "r") as f:
@@ -611,7 +611,7 @@ async def revoke(interaction: discord.Interaction, user: discord.Member, reason:
         if reason:
             embed.add_field(name="Reason", value=f"{reason}", inline=False)
             try:
-                await user.send(f"Your access to **Cotton predictor** has been revoked. Reason: {reason}")
+                await user.send(f"Your access to **kirby predictor** has been revoked. Reason: {reason}")
             except discord.Forbidden:
                 print(f"Failed to send revocation message to {user.mention}")
         embed.set_footer(text="Thank you for using Our Predictor", icon_url=LOGO)
@@ -631,7 +631,7 @@ async def status(interaction: discord.Interaction):
     user_id = str(interaction.user.id)
     member = interaction.user
 
-    if not discord.utils.get(member.roles, name="Customers"):
+    if not discord.utils.get(member.roles, name="Customer"):
         embed_role = discord.Embed(
             title="Error",
             description="You do not have an active subscription.",
@@ -687,7 +687,7 @@ async def choices(interaction: discord.Interaction, choice: str = None, hexcolor
     member = interaction.user
     user_id = str(interaction.user.id)
 
-    if not discord.utils.get(member.roles, name="Customers"):
+    if not discord.utils.get(member.roles, name="Customer"):
         embed_role = discord.Embed(
             title="Access Denied",
             description="You don't have the required role to use this command.",
@@ -695,7 +695,7 @@ async def choices(interaction: discord.Interaction, choice: str = None, hexcolor
         )
         await interaction.response.send_message(embed=embed_role, ephemeral=True)
         return
-
+    
     if choice == "Emojis":
       with open("keys.json", "r+") as f:
        keys = json.load(f)
@@ -710,7 +710,7 @@ async def choices(interaction: discord.Interaction, choice: str = None, hexcolor
                                   color=discord.Color.blue())
        embedemoji.add_field(name="Mine Emojis:", value=f"> ``{mine_emoji}``", inline=False)
        embedemoji.add_field(name="Safe Emojis:", value=f"> ``{safe_emoji}``")
-       embedemoji.set_footer(text="made by yutess", icon_url="https://cdn.discordapp.com/avatars/1128919498196529264/0e92c6e8433624fc2925d183d8360bad.png")
+       embedemoji.set_footer(text="made by zap", icon_url="https://cdn.discordapp.com/avatars/1128919498196529264/0e92c6e8433624fc2925d183d8360bad.png")
        await interaction.response.send_message(embed=embedemoji, ephemeral=True)
 
     elif choice == "Hex Color":
@@ -720,12 +720,16 @@ async def choices(interaction: discord.Interaction, choice: str = None, hexcolor
 #method
 
 PREDICTION_CHOICES = {
-    "1": "Logarithm",
-    "2": "Logarithm2",
-    "3": "Past Games",
-    "4": "Probability",
+    "1": "Algorithm",
+    "2": "Logarithm",
+    "3": "Logarithm2",
+    "4": "Past Games",
     "5": "AI",
-    "10": "Algorithm"
+    "6": "Probability",
+    "7": "Likelihood",
+    "8": "Algorithm2",
+    "9": "Probability2",
+    "10": "Past Games"
 }  
 
 @app_commands.choices(
@@ -738,8 +742,8 @@ PREDICTION_CHOICES = {
 async def set_method(interaction: discord.Interaction, prediction: str):
     member = interaction.user
     user_id = str(member.id)
-
-    if not discord.utils.get(member.roles, name="Customers"):
+    
+    if not discord.utils.get(member.roles, name="Customer"):
         embed_role = discord.Embed(
             title="Access Denied",
             description="You don't have the required role to use this command.",
@@ -747,7 +751,7 @@ async def set_method(interaction: discord.Interaction, prediction: str):
         )
         await interaction.response.send_message(embed=embed_role, ephemeral=True)
         return
-
+    
     chosen_prediction = PREDICTION_CHOICES.get(prediction)
     if not chosen_prediction:
         embed = discord.Embed(
@@ -762,7 +766,7 @@ async def set_method(interaction: discord.Interaction, prediction: str):
 
     with open('method.json', 'w') as f:
         json.dump(mode, f, indent=4)
-
+    
     embed = discord.Embed(color=discord.Color.blue())
     embed.add_field(
         name="Successfully Set",
@@ -776,7 +780,7 @@ class Unrig:
     def __init__(self, auth_token):
         self.auth_token = auth_token
         self.t = tls_client.Session(client_identifier="Chrome_104")
-
+        
     def hashlib_nigger(self):
         self.headers = {
             'authority': 'api.bloxflip.com',
@@ -800,24 +804,24 @@ class Unrig:
 
         try:
             response = self.t.get('https://api.bloxflip.com/games/mines/history', params=params, headers=self.headers)
-
+            
             if response.status_code != 200:
                 raise Exception(f"HTTP error: {response.status_code}")
-
+            
             r = response.json()['data']
             self.hashes = [x['serverSeed'] for x in r if not x['exploded']]
             return self.change_hash()
         except Exception as e:
             print(f"An error occurred while making the GET request: {e}")
             return False
-
+    
     def change_hash(self):
         try:
             change_hash_req = self.t.post('https://api.bloxflip.com/provably-fair/clientSeed',
             json={
                 'clientSeed': self.hashes[random.randint(0, len(self.hashes) - 1)][:32]
             }, headers=self.headers)
-
+            
             if change_hash_req.status_code != 200:
                 raise Exception(f"HTTP error: {change_hash_req.status_code}")
 
@@ -829,8 +833,8 @@ class Unrig:
 @tree.command(name="unrig", description="Unrigs your gameplay use this one 1 times only.")
 async def unrigger(interaction: discord.Interaction, activate_unrig: str = "False"):
     member = interaction.user
-
-    if not discord.utils.get(member.roles, name="Customers"):
+    
+    if not discord.utils.get(member.roles, name="Customer"):
         embed_role = discord.Embed(
             title="Error",
             description="You do not have active subscription.",
@@ -838,9 +842,9 @@ async def unrigger(interaction: discord.Interaction, activate_unrig: str = "Fals
         )
         await interaction.response.send_message(embed=embed_role, ephemeral=True)
         return
-
+    
     activate_unrig = activate_unrig.lower() 
-
+    
     if activate_unrig == "true":
         activate_unrig = True
     elif activate_unrig == "false":
@@ -854,7 +858,7 @@ async def unrigger(interaction: discord.Interaction, activate_unrig: str = "Fals
         )
         await interaction.response.send_message(embed=embed_invalid_arg, ephemeral=True)
         return
-
+    
     try:
         with open("tokens.json", "r") as f:
             keys = json.load(f)
@@ -870,7 +874,7 @@ async def unrigger(interaction: discord.Interaction, activate_unrig: str = "Fals
                 await interaction.response.send_message(embed=embed, 
                                                         ephemeral=True)
                 return
-
+            
     except FileNotFoundError:
         embed_no_file = discord.Embed(
             title="Tokens File Not Found",
@@ -879,7 +883,7 @@ async def unrigger(interaction: discord.Interaction, activate_unrig: str = "Fals
         )
         await interaction.response.send_message(embed=embed_no_file, ephemeral=True)
         return
-
+    
     b = Unrig(auth_token=auth)
     if activate_unrig:
         change = b.hashlib_nigger()
@@ -911,14 +915,14 @@ async def unrigger(interaction: discord.Interaction, activate_unrig: str = "Fals
 
 def calculate_likelihood(tower_levels, safe_emoji):
     likelihood_grid = [[0.0 for _ in range(len(tower_levels[0]))] for _ in range(len(tower_levels))]
-
+    
     for i in range(len(tower_levels)):
         for j in range(len(tower_levels[i])):
             if tower_levels[i][j] == 0:
                 likelihood_grid[i][j] = 0.3  
             else:
                 likelihood_grid[i][j] = 0.8  
-
+    
     return likelihood_grid
 
 @tree.command(name='towers', description="Still in beta")
@@ -934,7 +938,7 @@ async def authtowers(interaction: discord.Interaction, rows: int):
         )
         await interaction.response.send_message(embed=embed_role, ephemeral=True)
         return
-
+    
     with open("tokens.json", "r") as f:
         keys = json.load(f)
         user_keys = keys.get(str(interaction.user.id))
@@ -960,7 +964,7 @@ async def authtowers(interaction: discord.Interaction, rows: int):
             else:
                 mine_emoji = "❌"
                 safe_emoji = "✅"
-
+                
             difficulty = data['game']['difficulty']
             if difficulty == 'hard':
                 embed = discord.Embed(title="Error Difficulty", description="Mystic cannot predict for hard difficulty", color=discord.Color.red())
@@ -971,11 +975,11 @@ async def authtowers(interaction: discord.Interaction, rows: int):
                 nonce = data['game']['nonce'] 
                 hash = data['game']['_id']['$oid']
 
-                response = requests.get('https://api.bloxflip.com/games/towers/history?size=6&page=0', headers=headers, params={'size': 5, 'page': 0})
+                response = requests.get('https://api.bloxflip.com/games/towers/history', headers=headers, params={'size': 5, 'page': 0})
                 data = json.loads(response.text)
 
                 last_games = data['data']
-
+                    
                 if difficulty == 'normal' and all(game['difficulty'] == 'normal' for game in last_games):
                     pass 
                 elif difficulty == 'easy' and all(game['difficulty'] == 'easy' for game in last_games):
@@ -984,20 +988,20 @@ async def authtowers(interaction: discord.Interaction, rows: int):
                     embed = discord.Embed(title="Error", description="Not enough data or games!", color=discord.Color.red())
                     await interaction.response.send_message(embed=embed, ephemeral=True)
                     return
-
+                    
                 if data['success']:
                     tower_levels = data['data'][1]['towerLevels']
 
-
+                   
                     likelihood_grid = calculate_likelihood(tower_levels, safe_emoji)
 
-
+                   
                     likelihood_grid = likelihood_grid[:rows]
 
-
+        
                     for row in likelihood_grid:
                         row.reverse()
-
+    
                     Prediction = "\n".join(["".join([safe_emoji if cell >= 0.5 else mine_emoji for cell in row]) for row in likelihood_grid])
 
                     embed = discord.Embed(title="Algorithm Tower Prediction", description=f"{Prediction}", color=discord.Color.purple)
@@ -1007,7 +1011,7 @@ async def authtowers(interaction: discord.Interaction, rows: int):
                     embed.add_field(name="Bet Amount:", value=f"> {bet_amount}", inline=False)
                     embed.add_field(name="Hash:", value=f"> {hash}", inline=False)
                     embed.add_field(name="Game Nounce:", value=f"> {nonce}", inline=False)
-                    embed.set_footer(icon_url=LOGO, text="• TowersGameMode")
+                    embed.set_footer(icon_url=LOGO, text="Zhask V2 • TowersGameMode")
                     await interaction.response.send_message(embed=embed, ephemeral=True)             
                 else:
                     embed1 = discord.Embed(title="Error", description="No account Linked found. Please link your account and rerun the command.", color=discord.Color.red())
@@ -1022,7 +1026,7 @@ async def mines(interaction: discord.Interaction, clicks: str):
     method = mode.get(user_id, {}).get("prediction")
 
 
-    if not discord.utils.get(member.roles, name="Customers"):
+    if not discord.utils.get(member.roles, name="Customer"):
         embed_role = discord.Embed(
             title="Error",
             description="You do not have active subscription.",
@@ -1030,7 +1034,7 @@ async def mines(interaction: discord.Interaction, clicks: str):
         )
         await interaction.response.send_message(embed=embed_role, ephemeral=True)
         return
-
+    
     if not method:
         embed_no_method = discord.Embed(
             title="Prediction Method Not Set",
@@ -1039,9 +1043,9 @@ async def mines(interaction: discord.Interaction, clicks: str):
         )
         await interaction.response.send_message(embed=embed_no_method, ephemeral=True)
         return
-
+    
     history = None
-
+    
     if method == "Algorithm": # 5/10
         with open("tokens.json", "r") as f:
           keys = json.load(f)
@@ -1064,7 +1068,7 @@ async def mines(interaction: discord.Interaction, clicks: str):
             mines_amount = data_game['game']['minesAmount']
             uuid = data_game['game']['uuid']
             bet_amount = data_game['game']['betAmount']
-
+    
             nonce1 = data_game['game']['nonce'] - 1
 
             r2 = scraper.get('https://api.bloxflip.com/games/mines/history',
@@ -1080,7 +1084,7 @@ async def mines(interaction: discord.Interaction, clicks: str):
                                   color=discord.Color.red())
             return await interaction.response.send_message(embed=embed,
                                                            ephemeral=True)
-
+        
         grid_size = 25
         num_spot = clicks
 
@@ -1108,7 +1112,7 @@ async def mines(interaction: discord.Interaction, clicks: str):
 
             likelihood_scores = [1 - bomb_likelihoods[spot // 5, spot % 5] for spot in safe_spots]
 
-
+   
             sorted_safe_spots = [x for _, x in sorted(zip(likelihood_scores, safe_spots), reverse=True)]
 
 
@@ -1168,12 +1172,12 @@ async def mines(interaction: discord.Interaction, clicks: str):
         embed1.add_field(name="Games Nounce", 
                      value=f"> {nonce1}", 
                      inline=False)
-        embed1.set_footer(text=f" • MinesGameMode", icon_url=LOGO)
+        embed1.set_footer(text=f"kirby • MinesGameMode", icon_url=LOGO)
         await interaction.response.send_message(embed=embed1, ephemeral=True)
-
-
-
-
+        
+        
+        
+    
     elif method == "Logarithm": # 7/10
           with open("tokens.json", "r") as f:
             keys = json.load(f)
@@ -1196,9 +1200,9 @@ async def mines(interaction: discord.Interaction, clicks: str):
               mines_amount = data_game['game']['minesAmount']
               uuid = data_game['game']['uuid']
               bet_amount = data_game['game']['betAmount']
-
+            
               nonce2 = data_game['game']['nonce'] - 1
-
+              
               r4 = scraper.get('https://api.bloxflip.com/games/mines/history',
                               headers={"x-auth-token": auth},
                               params={"size": '5', "page": '0'})
@@ -1212,7 +1216,7 @@ async def mines(interaction: discord.Interaction, clicks: str):
                                     color=discord.Color.red())
               return await interaction.response.send_message(embed=embed,
                                                             ephemeral=True)
-
+              
           grid = ['💥'] * 25
 
           logarithm_model = np.zeros((25, 25, 25, 25))
@@ -1341,7 +1345,7 @@ async def mines(interaction: discord.Interaction, clicks: str):
           embed2.add_field(name="Games Nounce", 
                          value=f"> {nonce2}", 
                          inline=False)
-          embed2.set_footer(text=f" • MinesGameMode", icon_url=LOGO)
+          embed2.set_footer(text=f"kirby • MinesGameMode", icon_url=LOGO)
           await interaction.response.send_message(embed=embed2, ephemeral=True)
 
     elif method == "Logarithm2": # 7/10
@@ -1385,7 +1389,7 @@ async def mines(interaction: discord.Interaction, clicks: str):
                                     color=discord.Color.red())
               return await interaction.response.send_message(embed=embed,
                                                              ephemeral=True)
-
+          
           grid = ['💥'] * 25
 
           logarithm_model = np.zeros((25, 25, 25, 25))
@@ -1479,7 +1483,7 @@ async def mines(interaction: discord.Interaction, clicks: str):
                   grid[spot] = '❔'
               else:
                   grid[spot] = '❌'
-
+          
           mine_emoji = "❌"
           safe_emoji = "✅"
 
@@ -1510,10 +1514,10 @@ async def mines(interaction: discord.Interaction, clicks: str):
           embed3.add_field(name="Games Nounce", 
                      value=f"> {nonce3}", 
                      inline=False)
-          embed3.set_footer(text=f" • MinesGameMode", icon_url=LOGO)
+          embed3.set_footer(text=f"kirby • MinesGameMode", icon_url=LOGO)
           await interaction.response.send_message(embed=embed3, ephemeral=True)
 
-    elif method == "Api Linked": # 6/10
+    elif method == "Past Games": # 6/10
           with open("tokens.json", "r") as f:
               keys = json.load(f)
               user_keys = keys.get(str(interaction.user.id))
@@ -1533,9 +1537,9 @@ async def mines(interaction: discord.Interaction, clicks: str):
              mines_amount = data_game['game']['minesAmount']
              uuid = data_game['game']['uuid']
              bet_amount = data_game['game']['betAmount']
-
+             
              nonce4 = data_game['game']['nonce'] - 1
-
+             
 
              params = {
              'size': '5',
@@ -1544,7 +1548,7 @@ async def mines(interaction: discord.Interaction, clicks: str):
              headers = {
              "x-auth-token": auth
              }
-             response = scraper.get('https://api.bloxflip.com/games/mines/history?size=5&page=0',
+             response = scraper.get('https://api.bloxflip.com/games/mines/history',
                                     params=params,
                                     headers=headers).json()["data"]
              if len(response) < 3:
@@ -1555,7 +1559,7 @@ async def mines(interaction: discord.Interaction, clicks: str):
                  )
                  await interaction.response.send_message(embed=embed_insufficient, ephemeral=True)
                  return
-
+             
              mine_locations = response[2].get('mineLocations')
 
              if not mine_locations:
@@ -1574,15 +1578,15 @@ async def mines(interaction: discord.Interaction, clicks: str):
               )
               await interaction.response.send_message(embed=embed_error, ephemeral=True)
               return
-
+          
           spots = len(mine_locations)
 
-          mines = ["🟥"] * 25
+          mines = ["❌"] * 25
           for i in range(spots):
               if i < len(mine_locations) and mine_locations[i] < 25:
-                  mines[mine_locations[i]] = "🟩"
+                  mines[mine_locations[i]] = "✅"
 
-          X_train = [[int(cell == "🟩") for cell in mines]]
+          X_train = [[int(cell == "✅") for cell in mines]]
           y_train = [1]
 
           model = RandomForestClassifier(n_estimators=100, random_state=42)
@@ -1592,14 +1596,14 @@ async def mines(interaction: discord.Interaction, clicks: str):
           prediction = model.predict(X_pred)
 
           prediction_grid = np.zeros((5, 5), dtype=int)
-
+    
           for spot in prediction:
               row, col = divmod(spot, 5)
               prediction_grid[row][col] = 1
 
           prediction_string = ""
-          mine_emoji = "🟥"
-          safe_emoji = "🟩"
+          mine_emoji = "❌"
+          safe_emoji = "✅"
 
           if user_keys:
                 mine_emoji = user_keys.get("mine_emoji", mine_emoji)
@@ -1611,10 +1615,10 @@ async def mines(interaction: discord.Interaction, clicks: str):
           Prediction = ""
           for i in range(0, 25, 5):
               row = " ".join(
-                  [mine_emoji if cell == "🟥" else safe_emoji for cell in mines[i:i + 5]])
+                  [mine_emoji if cell == "❌" else safe_emoji for cell in mines[i:i + 5]])
               Prediction += row + "\n"
-
-          embed4 = discord.Embed(title="<a:loading:1191687171233546310> ```💣Mines Prediction💣```", 
+          
+          embed4 = discord.Embed(title="``🔎`` Mines Prediction", 
                            description=f"{Prediction}", 
                            color=discord.Color.blue())
           embed4.add_field(name="Prediction Method", 
@@ -1632,15 +1636,15 @@ async def mines(interaction: discord.Interaction, clicks: str):
           embed4.add_field(name="Game Nounce", 
                      value=f"> {nonce4}", 
                      inline=False)
-          embed4.set_footer(text=f" • MinesGameMode", icon_url=LOGO)
+          embed4.set_footer(text=f"kirby • MinesGameMode", icon_url=LOGO)
           await interaction.response.send_message(embed=embed4, ephemeral=True)
-
-
-
-
-
-
-
+          
+          
+          
+          
+          
+          
+    
     elif method == "AI": # ?
           with open("tokens.json", "r") as f:
               keys = json.load(f)
@@ -1662,9 +1666,9 @@ async def mines(interaction: discord.Interaction, clicks: str):
              mines_amount = data_game['game']['minesAmount']
              uuid = data_game['game']['uuid']
              bet_amount = data_game['game']['betAmount']
-
+            
              nonce5 = data_game['game']['nonce'] - 1
-
+             
              r8 = scraper.get('https://api.bloxflip.com/games/mines/history',
                               headers={"x-auth-token": auth},
                               params={
@@ -1681,7 +1685,7 @@ async def mines(interaction: discord.Interaction, clicks: str):
                                     color=discord.Color.red())
               return await interaction.response.send_message(embed=embed,
                                                              ephemeral=True)
-
+          
           num_spots = clicks
           safe_spots = []
           past_mine = mines_location
@@ -1698,16 +1702,16 @@ async def mines(interaction: discord.Interaction, clicks: str):
                        continue
                    adjacent.append(r * 5 + c + 1)
                    return adjacent
-
+               
           X = []
           y = []
 
           for i in range(25):
-             adj_mines = sum(1 for n in past_mine if n in get_adjacent(i) and n == '🟥')
+             adj_mines = sum(1 for n in past_mine if n in get_adjacent(i) and n == '❌')
              num_flagged = len(past_mine)
              num_safe_tiles = (25 - len(past_mine))
              prob_safe = (num_safe_tiles - adj_mines) / num_safe_tiles
-             adj_prob_safe = sum(1 for n in past_safe if n in get_adjacent(i) and n != '🟥' and n in [index for index in X])
+             adj_prob_safe = sum(1 for n in past_safe if n in get_adjacent(i) and n != '❌' and n in [index for index in X])
              adj_cleared = sum(1 for n in safe_spots if n in get_adjacent(i) and n in past_safe)
              X.append((i, num_safe_tiles, prob_safe, num_flagged, adj_prob_safe, adj_cleared))
              y.append(i in past_mine)
@@ -1734,23 +1738,23 @@ async def mines(interaction: discord.Interaction, clicks: str):
               chosen_spots.append(spot[0])
               if len(chosen_spots) == num_spots:
                   break
-
-          grid_list = ['🟥'] * 25
+          
+          grid_list = ['❌'] * 25
           for r in range(5):
            for c in range(5):
               index = r * 5 + c
               if index in past_mine:  
-                  grid_list[index] = '🟥'
+                  grid_list[index] = '❌'
               elif index in chosen_spots:
-                  grid_list[index] = '🟩'
+                  grid_list[index] = '✅'
 
-          mine_emoji = "🟥"
-          safe_emoji = "🟩"
+          mine_emoji = "❌"
+          safe_emoji = "✅"
 
           if user_keys:
                 mine_emoji = user_keys.get("mine_emoji", mine_emoji)
                 safe_emoji = user_keys.get("safe_emoji", safe_emoji)
-
+          
           embed5 = discord.Embed(title="``🔎`` Mines Prediction", description=f"{''.join(grid_list[:5])}\n{''.join(grid_list[5:10])}\n{''.join(grid_list[10:15])}\n{''.join(grid_list[15:20])}\n{''.join(grid_list[20:])}", color=discord.Color.purple())
           embed5.add_field(name="Prediction Method:", 
                      value=f"> {method}", 
@@ -1767,11 +1771,11 @@ async def mines(interaction: discord.Interaction, clicks: str):
           embed5.add_field(name="Game Nounce", 
                      value=f"> {nonce5}", 
                      inline=False)
-          embed5.set_footer(text=f" • MinesGameMode", icon_url=LOGO)
+          embed5.set_footer(text=f"kirby • MinesGameMode", icon_url=LOGO)
           await interaction.response.send_message(embed=embed5, ephemeral=True)
 
 
-
+          
 
     elif method == "Probability": # 5/10
           with open("tokens.json", "r") as f:
@@ -1794,9 +1798,9 @@ async def mines(interaction: discord.Interaction, clicks: str):
              mines_amount = data_game['game']['minesAmount']
              uuid = data_game['game']['uuid']
              bet_amount = data_game['game']['betAmount']
-
+      
              nonce6 = data_game['game']['nonce'] - 1
-
+             
              r8 = scraper.get('https://api.bloxflip.com/games/mines/history',
                               headers={"x-auth-token": auth},
                               params={
@@ -1813,7 +1817,7 @@ async def mines(interaction: discord.Interaction, clicks: str):
                                     color=discord.Color.red())
               return await interaction.response.send_message(embed=embed,
                                                              ephemeral=True)
-
+          
           num_spots = clicks
           grid = ['💥'] * 25
           total_spots = list(range(25))
@@ -1878,7 +1882,7 @@ async def mines(interaction: discord.Interaction, clicks: str):
                   break
               elif np.random.rand() < safe_probs[spot]:
                   game['uncoveredLocations'].append(spot)
-
+          
           for spot in unclicked_spots_subset:
               if not exploded:
                   if spot not in game['uncoveredLocations']:
@@ -1887,14 +1891,14 @@ async def mines(interaction: discord.Interaction, clicks: str):
                       bad_counts[unclicked_spots.index(spot)] -= 1
                   if spot in mines_location:
                       num_mines_uncovered += 1
-
+        
           mc_safe_probs = np.zeros(25)
           for i in range(25):
               if i not in clicked_spots and i not in mines_location:
                  mc_safe_probs[i] = (safe_counts[unclicked_spots.index(i)] +
                                      bad_counts[unclicked_spots.index(i)] +
                                      safe_probs[i] * game_data) / (game_data + np.sum(safe_probs))
-
+                 
           top_safe_spots = np.argsort(mc_safe_probs)[::-1]
           top_safe_spots = [spot for spot in top_safe_spots if spot not in mines_location][:25]
           selected_safe_spots = np.random.choice(top_safe_spots, min(num_spots, len(top_safe_spots)), replace=False)
@@ -1920,7 +1924,7 @@ async def mines(interaction: discord.Interaction, clicks: str):
                 grid[spot] = '❔'
              else:
                 grid[spot] = '❌'
-
+          
           mine_emoji = "❌"
           safe_emoji = "✅"
 
@@ -1951,10 +1955,24 @@ async def mines(interaction: discord.Interaction, clicks: str):
           embed6.add_field(name="Games Nounce", 
                      value=f"> {nonce6}", 
                      inline=False)
-          embed6.set_footer(text=f" • MinesGameMode", icon_url=LOGO)
+          embed6.set_footer(text=f"kirby • MinesGameMode", icon_url=LOGO)
           await interaction.response.send_message(embed=embed6, ephemeral=True)
+    
+    elif method == "Likelihood":
+          embed = discord.Embed(title="Coming Soon", color=discord.Color.blue())
+          await interaction.response.send_message(embed=embed)
+    
+    elif method == "Algorithm2":
+          embed = discord.Embed(title="Coming Soon", color=discord.Color.blue())
+          await interaction.response.send_message(embed=embed)
 
+    elif method == "Probability2":
+          embed = discord.Embed(title="Coming Soon", color=discord.Color.blue())
+          await interaction.response.send_message(embed=embed)
 
+    elif method == "Past Games2":
+          embed = discord.Embed(title="Coming Soon", color=discord.Color.blue())
+          await interaction.response.send_message(embed=embed)
 
 #crash
 
@@ -1965,7 +1983,7 @@ async def crash(interaction: discord.Interaction):
     model_chosen = grab_users_model(user_id)
     member = interaction.user
 
-    if not discord.utils.get(member.roles, name="Customers"):
+    if not discord.utils.get(member.roles, name="Customer"):
         embed_role = discord.Embed(
             title="Error",
             description="You do not have active subscription.",
@@ -3080,7 +3098,7 @@ class MachineAILearner:
         df['prev_colors'] = df['winningColor'].shift(4).fillna('')
         df = df.dropna()
         return df[['prev_colors', 'winningColor']]
-
+    
     def evaluate_color_accuracy(self, model, label_encoder, history, target_color):
         recent_rounds = history[-25:] 
         correct_predictions = 0
@@ -3099,7 +3117,7 @@ class MachineAILearner:
 
         if total_predictions == 0:
             return 0.0
-
+    
         margin_of_error = 0.1 * total_predictions
         accuracy = max(min((correct_predictions / total_predictions) * 100, total_predictions + margin_of_error), total_predictions - margin_of_error)
         return accuracy
@@ -3107,26 +3125,26 @@ class MachineAILearner:
     def train_machine(self, data):
         X = data['prev_colors']
         y = data['winningColor']
-
+        
         label_encoder = LabelEncoder()
         y_encoded = label_encoder.fit_transform(y)
-
+        
         pipeline = Pipeline([
             ('vectorizer', CountVectorizer(ngram_range=(1, 3))),
             ('scaler', StandardScaler(with_mean=False)),
             ('model', RandomForestClassifier(n_estimators=100, random_state=42))
         ])
-
+        
         pipeline.fit(X, y_encoded)
         return pipeline, label_encoder
-
+    
     def predict_next_color(self, model, label_encoder, history):
         recent_rounds = history[-4:]
         input_data = ' '.join(game["winningColor"] for game in recent_rounds)
         prediction_encoded = model.predict([input_data])[0]
         next_color = label_encoder.inverse_transform([prediction_encoded])[0]
         return next_color
-
+    
     def save_trained_machine(self, model, label_encoder):
         joblib_dump(model, "machine_learning_model.joblib")
         joblib_dump(label_encoder, "machine_label_encoder.joblib")
@@ -3135,7 +3153,7 @@ class MachineAILearner:
         model = joblib_load("machine_learning_model.joblib")
         label_encoder = joblib_load("machine_label_encoder.joblib")
         return model, label_encoder
-
+    
 if __name__ == "__main__":
     machine_learner = MachineAILearner()
 
@@ -3146,9 +3164,9 @@ if __name__ == "__main__":
 
         color_list = ["red", "purple", "yellow"]
         color_accuracies = [machine_learner.evaluate_color_accuracy(trained_model, trained_label_encoder, data_history, color) for color in color_list]
-
+        
         next_color_prediction = machine_learner.predict_next_color(trained_model, trained_label_encoder, data_history)
-
+        
         machine_learner.save_trained_machine(trained_model, trained_label_encoder)
     except RuntimeError as e:
         print("An error occurred:", e)
@@ -3174,7 +3192,7 @@ class Algorithm:
         df['prev_colors'] = df['winningColor'].shift(4).fillna('')
         df = df.dropna()
         return df[['prev_colors', 'winningColor']]
-
+    
     def evaluate_color_accuracy(self, model, label_encoder, history, target_color):
         recent_rounds = history[-25:] 
         correct_predictions = 0
@@ -3193,7 +3211,7 @@ class Algorithm:
 
         if total_predictions == 0:
             return 0.0
-
+    
         margin_of_error = 0.1 * total_predictions
         accuracy = max(min((correct_predictions / total_predictions) * 100, total_predictions + margin_of_error), total_predictions - margin_of_error)
         return accuracy
@@ -3201,26 +3219,26 @@ class Algorithm:
     def train_machine(self, data):
         X = data['prev_colors']
         y = data['winningColor']
-
+        
         label_encoder = LabelEncoder()
         y_encoded = label_encoder.fit_transform(y)
-
+        
         pipeline = Pipeline([
             ('vectorizer', CountVectorizer(ngram_range=(1, 3))),
             ('scaler', StandardScaler(with_mean=False)),
             ('model', LogisticRegression(solver='liblinear'))
         ])
-
+        
         pipeline.fit(X, y_encoded)
         return pipeline, label_encoder
-
+    
     def predict_next_color(self, model, label_encoder, history):
         recent_rounds = history[-4:]
         input_data = ' '.join(game["winningColor"] for game in recent_rounds)
         prediction_encoded = model.predict([input_data])[0]
         next_color = label_encoder.inverse_transform([prediction_encoded])[0]
         return next_color
-
+    
     def save_trained_machine(self, model, label_encoder):
         joblib_dump(model, "algorithm_learning_model.joblib2") 
         joblib_dump(label_encoder, "algorithm_label_encoder.joblib2")  
@@ -3229,7 +3247,7 @@ class Algorithm:
         model = joblib_load("algorithm_learning_model.joblib2")
         label_encoder = joblib_load("algorithm_label_encoder.joblib2")  
         return model, label_encoder
-
+    
 if __name__ == "__main__":
     algorithm = Algorithm()
 
@@ -3240,9 +3258,9 @@ if __name__ == "__main__":
 
         color_list = ["red", "purple", "yellow"]
         color_accuracies = [algorithm.evaluate_color_accuracy(trained_model, trained_label_encoder, data_history, color) for color in color_list]
-
+        
         next_color_prediction = algorithm.predict_next_color(trained_model, trained_label_encoder, data_history)
-
+        
         algorithm.save_trained_machine(trained_model, trained_label_encoder)
     except RuntimeError as e:
         print("An error occurred:", e)
@@ -3261,7 +3279,7 @@ if __name__ == "__main__":
 async def roulette(interaction: discord.Interaction, method: str):
     member = interaction.user
 
-    if not discord.utils.get(member.roles, name="Customers"):
+    if not discord.utils.get(member.roles, name="Customer"):
         embed_role = discord.Embed(
             title="Error",
             description="You do not have an active subscription.",
@@ -3269,7 +3287,7 @@ async def roulette(interaction: discord.Interaction, method: str):
         )
         await interaction.response.send_message(embed=embed_role, ephemeral=True)
         return
-
+    
     if method == "AI":
         with open("tokens.json", "r") as f:
           keys = json.load(f)
@@ -3285,7 +3303,7 @@ async def roulette(interaction: discord.Interaction, method: str):
             await interaction.response.send_message(embed=embed, 
                                                 ephemeral=True)
             return  
-
+          
         try:
             response = scraper.get('https://api.bloxflip.com/games/roulette',
                                    headers={"x-auth-token": auth})
@@ -3299,7 +3317,7 @@ async def roulette(interaction: discord.Interaction, method: str):
                 embed = discord.Embed(title="Round not Over", description="Round is about to be finished. Please wait!", color=discord.Color.red())
                 await interaction.response.send_message(embed=embed)
                 return
-
+            
             machine_learner = MachineAILearner()  
             history = machine_learner.fetch_data() 
             model, label_encoder = machine_learner.load_trained_machine()
@@ -3322,7 +3340,7 @@ async def roulette(interaction: discord.Interaction, method: str):
             error_message = "An error occurred while processing API response."
             embed = discord.Embed(title="API Response Error", description=error_message, color=discord.Color.red())
             await interaction.response.send_message(embed=embed)
-
+    
     elif method == "Algorithm":
         with open("tokens.json", "r") as f:
             keys = json.load(f)
@@ -3338,7 +3356,7 @@ async def roulette(interaction: discord.Interaction, method: str):
               await interaction.response.send_message(embed=embed, 
                                                        ephemeral=True)
               return
-
+        
 
         try:
            response = scraper.get('https://api.bloxflip.com/games/roulette')
@@ -3408,7 +3426,7 @@ async def roulette(interaction: discord.Interaction, method: str):
 async def site(interaction: discord.Interaction, site_choices: app_commands.Choice[str]):
     member = interaction.user
 
-    if not discord.utils.get(member.roles, name="Customers"):
+    if not discord.utils.get(member.roles, name="Customer"):
         embed_role = discord.Embed(
             title="Error",
             description="You do not have active subscription.",
@@ -3446,8 +3464,8 @@ async def site(interaction: discord.Interaction, site_choices: app_commands.Choi
 @tree.command(name="model", description="Allows you set your base model for predicting")
 async def model(interaction: discord.Interaction, model: app_commands.Choice[str]):
     member = interaction.user
-
-    if not discord.utils.get(member.roles, name="Customers"):
+    
+    if not discord.utils.get(member.roles, name="Customer"):
         embed_role = discord.Embed(
             title="Error",
             description="You do not have active subscription.",
@@ -3455,7 +3473,7 @@ async def model(interaction: discord.Interaction, model: app_commands.Choice[str
         )
         await interaction.response.send_message(embed=embed_role, ephemeral=True)
         return
-
+    
     with open("models.json", "w") as f:
         models[str(interaction.user.id)] = {"model": model.name}
         json.dump(models, f, indent=4)
@@ -3463,11 +3481,4 @@ async def model(interaction: discord.Interaction, model: app_commands.Choice[str
     embed.add_field(name="", value=f"> Your selected predictive model has been changed to **{model.name}**.", inline=False)
     embed.set_footer(text="Thank you for choosing Our Predictor", icon_url=LOGO)
     await interaction.response.send_message(embed=embed, ephemeral=True)
-
-#testing binibirocha
-
-
-
-#BOT & TOKEN
-
-client.run("Add your bot token")
+          client.run("Add your bot token")
